@@ -1,0 +1,141 @@
+<!--Voi ajaa suoraan osoitteessa: https://www.w3schools.com/code/tryit.asp?filename=FVDY3X8QCE2X -->
+<!DOCTYPE html>
+<html>
+<style>
+    table {
+    	border-collapse: collapse;
+        margin: 5px;
+        margin-bottom: 15px;
+    }
+    td {
+    	border: 0.1px solid black;
+        width: 15px;
+        height: 15px;
+        text-align: center;
+    }
+</style>
+<head>
+    <script type="text/javascript">
+      var field = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+      var currentPlayer = 1;
+      var isEnded = false;
+
+      function checkLines() {
+
+          //check rows
+          for(var row = 0; row < 3; row++) {
+              var ones = 0;
+              var twos = 0;
+              for(var col = 0; col < 3; col++) {
+                  if(field[row][col] == 1)
+                      ones++;
+                  else if(field[row][col] == 2)
+                      twos++;
+              }
+              if(ones == 3 || twos == 3)
+                  isEnded = true;
+          }
+
+          //check cols
+          for(var col = 0; col < 3; col++) {
+              var ones = 0;
+              var twos = 0;
+              for(var row = 0; row < 3; row++) {
+                  if(field[row][col] == 1)
+                      ones++;
+                  else if(field[row][col] == 2)
+                      twos++;
+              }
+              if(ones == 3 || twos == 3)
+                  isEnded = true;
+          }
+
+          //check diagonals
+          if(field[1][1] != 0){
+             if (field[0][0] == 1 && field[1][1] == 1 && field[2][2] == 1)
+                  isEnded = true;
+             if (field[0][2] == 1 && field[1][1] == 1 && field[2][0] == 1)
+                  isEnded = true;
+             if (field[0][0] == 2 && field[1][1] == 2 && field[2][2] == 2)
+                  isEnded = true;
+             if (field[0][2] == 2 && field[1][1] == 2 && field[2][0] == 2)
+                  isEnded = true;
+          }
+
+          if(isEnded == false && isFieldFull()) {
+          	isEnded = true;
+            document.getElementById("instructions").innerHTML = "Peli päättyi 					tasapeliin";
+          }
+          else if(isEnded == true) {
+          	document.getElementById("instructions").innerHTML = "Pelaaja " + 					currentPlayer + " voitti!";
+          }
+      }
+
+      function addMark(row, col) {
+      
+	     if(isEnded == false) {
+          if(field[row][col] == 0) {
+              field[row][col] = currentPlayer
+              document.getElementById(row + "," + col).innerHTML = currentPlayer;
+              checkLines();
+              currentPlayer == 1 ? currentPlayer = 2 : currentPlayer = 1;
+              if(isEnded == false) {
+              	document.getElementById("instructions").innerHTML = "Vuorossa Pelaaja "	+ currentPlayer;	
+              }	
+          }
+          else {
+              document.getElementById("instructions").innerHTML = "Ruudussa on jo merkki. Vuorossa Pelaaja " + currentPlayer;
+          }
+        }    
+      }
+      
+      function isFieldFull() {
+      
+        for(var row = 0; row < 3; row++) {
+          for(var col = 0; col < 3; col++) {
+            if(field[row][col] == 0)
+              return false;
+          }
+        }
+        return true;
+      }
+      
+      function refreshGame(){
+      
+      	field = [[0, 0, 0], [0, 0, 0], [0, 0, 0]];
+      	currentPlayer = 1;
+      	isEnded = false;
+        for(var row = 0; row < 3; row++) {
+          for(var col = 0; col < 3; col++) {
+            document.getElementById(row + "," + col).innerHTML = 0;
+          }
+        }
+        document.getElementById("instructions").innerHTML = "Vuorossa Pelaaja "					 + currentPlayer;
+      }
+
+    </script>
+</head>
+<body>
+
+  <h1>Ristinolla-peli</h1>
+  <p id="instructions">Vuorossa Pelaaja 1</p>
+  <table>
+      <tr>
+          <td id="0,0" onClick="addMark(0,0)">0</td>
+          <td id="0,1" onClick="addMark(0,1)">0</td>
+          <td id="0,2" onClick="addMark(0,2)">0</td>
+      </tr>
+      <tr>
+          <td id="1,0" onClick="addMark(1,0)">0</td>
+          <td id="1,1" onClick="addMark(1,1)">0</td>
+          <td id="1,2" onClick="addMark(1,2)">0</td>
+      </tr>
+      <tr>
+          <td id="2,0" onClick="addMark(2,0)">0</td>
+          <td id="2,1" onClick="addMark(2,1)">0</td>
+          <td id="2,2" onClick="addMark(2,2)">0</td>
+      </tr>
+  </table>
+  <input type="button" onClick="refreshGame()" value="Aloita uusi peli"/>
+</body>
+</html>
